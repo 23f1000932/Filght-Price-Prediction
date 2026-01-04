@@ -11,119 +11,145 @@
     
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: { sans: ['Outfit', 'sans-serif'] },
                     colors: {
                         glass: 'rgba(255, 255, 255, 0.05)',
                         glassBorder: 'rgba(255, 255, 255, 0.1)',
-                        accent: '#6366f1',
+                        // Define our new accent colors explicitly if needed, but Tailwind utilities work fine
                     }
                 }
             }
         }
     </script>
     <style>
-        body {
-            background-color: #0f172a;
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-            color: #f8fafc;
+        /* Base transitions for smooth theme switching */
+        body, .glass-card, nav, .text-slate-300, .text-white {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
+
+        /* Light Mode Card (Default) */
         .glass-card {
-            background: rgba(30, 41, 59, 0.4);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(204, 251, 241, 0.8); /* Teal tint border */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(20, 184, 166, 0.1); /* Teal shadow */
+        }
+
+        /* Dark Mode Overrides */
+        .dark .glass-card {
+            background: rgba(17, 24, 39, 0.6); /* Gray-900 with opacity */
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
-        .glass-card:hover {
-            border-color: rgba(99, 102, 241, 0.5);
-            transform: translateY(-5px);
-            transition: all 0.3s ease;
+        .dark .glass-card:hover {
+            border-color: rgba(45, 212, 191, 0.5); /* Teal-400 */
         }
+
         .text-gradient {
-            background: linear-gradient(to right, #818cf8, #c084fc);
+            background: linear-gradient(to right, #14b8a6, #f43f5e); /* Teal-500 to Rose-500 */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased bg-slate-50 text-slate-900 dark:bg-[#0f172a] dark:text-fuchsia-50 selection:bg-teal-500 selection:text-white">
 
     <!-- Navbar -->
-    <nav class="fixed w-full z-50 glass-card border-none rounded-none border-b border-white/10 top-0">
+    <nav class="fixed w-full z-50 glass-card border-none rounded-none border-b border-slate-200 dark:border-white/10 top-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-400 to-rose-500 flex items-center justify-center shadow-lg shadow-teal-500/20">
                         <i class="fa-solid fa-plane-up text-white text-lg"></i>
                     </div>
-                    <span class="font-bold text-xl tracking-tight">Aero<span class="text-indigo-400">Vision</span></span>
+                    <span class="font-bold text-xl tracking-tight text-slate-800 dark:text-white">Aero<span class="text-teal-600 dark:text-teal-400">Vision</span></span>
                 </div>
+                
                 <div class="hidden md:flex space-x-8">
-                    <a href="#intro" class="text-slate-300 hover:text-white transition-colors text-sm font-medium">Project Scope</a>
-                    <a href="#analysis" class="text-slate-300 hover:text-white transition-colors text-sm font-medium">Data Insights</a>
-                    <a href="#models" class="text-slate-300 hover:text-white transition-colors text-sm font-medium">Model Results</a>
+                    <a href="#intro" class="text-slate-600 hover:text-teal-600 dark:text-slate-300 dark:hover:text-teal-300 transition-colors text-sm font-medium">Project Scope</a>
+                    <a href="#analysis" class="text-slate-600 hover:text-teal-600 dark:text-slate-300 dark:hover:text-teal-300 transition-colors text-sm font-medium">Data Insights</a>
+                    <a href="#models" class="text-slate-600 hover:text-teal-600 dark:text-slate-300 dark:hover:text-teal-300 transition-colors text-sm font-medium">Model Results</a>
                 </div>
-                <a href="https://github.com/yourusername/flight-price-prediction" target="_blank" class="px-5 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 transition-all text-sm font-medium flex items-center gap-2">
-                    <i class="fa-brands fa-github"></i> <span>Repository</span>
-                </a>
+
+                <div class="flex items-center gap-4">
+                    <!-- Theme Toggle Button -->
+                    <button id="themeToggle" class="p-2.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-teal-50 dark:hover:bg-white/20 text-slate-600 dark:text-amber-300 transition-all focus:outline-none" aria-label="Toggle Dark Mode">
+                        <i class="fa-solid fa-sun hidden dark:block"></i>
+                        <i class="fa-solid fa-moon block dark:hidden text-slate-600"></i>
+                    </button>
+
+                    <a href="https://github.com/yourusername/flight-price-prediction" target="_blank" class="px-5 py-2.5 rounded-lg bg-slate-900 text-white dark:bg-white/10 dark:hover:bg-white/20 dark:border dark:border-white/10 transition-all text-sm font-medium flex items-center gap-2 hover:bg-slate-800">
+                        <i class="fa-brands fa-github"></i> <span class="hidden sm:inline">Repository</span>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="intro" class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center text-center relative">
-        <div class="absolute top-20 left-10 w-72 h-72 bg-blue-600/20 rounded-full blur-3xl mix-blend-screen animate-pulse"></div>
-        <div class="absolute bottom-10 right-10 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl mix-blend-screen"></div>
+    <section id="intro" class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center text-center relative overflow-hidden">
+        <!-- Background Gradients (Dynamic - Teal & Rose) -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+            <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-teal-200/40 dark:bg-teal-600/20 rounded-full blur-[100px] animate-pulse"></div>
+            <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-rose-200/40 dark:bg-rose-600/20 rounded-full blur-[100px]"></div>
+        </div>
         
-        <span class="px-4 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-xs font-semibold uppercase tracking-wider mb-6">
+        <span class="px-4 py-1.5 rounded-full border border-teal-200 bg-teal-50 text-teal-700 dark:border-teal-500/30 dark:bg-teal-500/10 dark:text-teal-300 text-xs font-semibold uppercase tracking-wider mb-6">
             Kaggle MLP Term 2 2025 Assignment
         </span>
-        <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-tight">
+        <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white mb-6 leading-tight">
             Deciphering <br> <span class="text-gradient">Flight Pricing Logic</span>
         </h1>
-        <p class="text-lg text-slate-400 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+        <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
             An advanced regression analysis aimed at predicting flight ticket prices with high precision. 
-            Leveraging machine learning to understand how variables like <span class="text-white font-medium">days left</span>, <span class="text-white font-medium">airline class</span>, and <span class="text-white font-medium">departure time</span> drive costs.
+            Leveraging machine learning to understand how variables like <span class="font-medium text-slate-900 dark:text-white">days left</span>, <span class="font-medium text-slate-900 dark:text-white">airline class</span>, and <span class="font-medium text-slate-900 dark:text-white">departure time</span> drive costs.
         </p>
 
         <!-- Project Intro Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl mt-8">
             <div class="glass-card p-8 rounded-2xl text-left">
-                <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4 text-blue-400">
+                <div class="w-12 h-12 bg-teal-100 dark:bg-teal-500/20 rounded-lg flex items-center justify-center mb-4 text-teal-600 dark:text-teal-400">
                     <i class="fa-solid fa-bullseye text-xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-2">The Challenge</h3>
-                <p class="text-sm text-slate-400">
-                    Participated in the <a href="https://www.kaggle.com/competitions/mlp-term-2-2025-kaggle-assignment-1" target="_blank" class="text-indigo-400 hover:underline">MLP Term 2 2025 Competition</a>. The goal was to build a model that minimizes prediction error (RMSE) on unseen test flight data.
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">The Challenge</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400">
+                    Participated in the <a href="https://www.kaggle.com/competitions/mlp-term-2-2025-kaggle-assignment-1" target="_blank" class="text-teal-600 dark:text-teal-400 hover:underline">MLP Term 2 2025 Competition</a>. The goal was to build a model that minimizes prediction error (RMSE) on unseen test flight data.
                 </p>
             </div>
             
             <div class="glass-card p-8 rounded-2xl text-left">
-                <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4 text-purple-400">
+                <div class="w-12 h-12 bg-rose-100 dark:bg-rose-500/20 rounded-lg flex items-center justify-center mb-4 text-rose-600 dark:text-rose-400">
                     <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-2">My Approach</h3>
-                <p class="text-sm text-slate-400">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">My Approach</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400">
                     Focused on <strong>Feature Engineering</strong>. Created 'Days_Left' from date columns, categorized 'Departure_Time', and handled mixed data types in the 'Flight_Code' column to extract valuable signals.
                 </p>
             </div>
 
             <div class="glass-card p-8 rounded-2xl text-left">
-                <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4 text-green-400">
+                <div class="w-12 h-12 bg-amber-100 dark:bg-amber-500/20 rounded-lg flex items-center justify-center mb-4 text-amber-600 dark:text-amber-400">
                     <i class="fa-solid fa-rocket text-xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-2">The Solution</h3>
-                <p class="text-sm text-slate-400">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">The Solution</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400">
                     Deployed a <strong>LightGBM Regressor</strong>. It outperformed Random Forest in training speed and handled the high cardinality of 'Source' and 'Destination' categorical features efficiently.
                 </p>
             </div>
@@ -131,22 +157,22 @@
     </section>
 
     <!-- Stats Ribbon -->
-    <section class="border-y border-white/5 bg-white/5 backdrop-blur-sm py-10">
+    <section class="border-y border-slate-200 dark:border-white/5 bg-white/50 dark:bg-white/5 backdrop-blur-sm py-10">
         <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-                <div class="text-3xl font-bold text-white mb-1">98.4%</div>
+                <div class="text-3xl font-bold text-slate-900 dark:text-white mb-1">98.4%</div>
                 <div class="text-xs uppercase tracking-widest text-slate-500">Model Accuracy (R²)</div>
             </div>
             <div>
-                <div class="text-3xl font-bold text-white mb-1">300k+</div>
+                <div class="text-3xl font-bold text-slate-900 dark:text-white mb-1">300k+</div>
                 <div class="text-xs uppercase tracking-widest text-slate-500">Data Points Analyzed</div>
             </div>
             <div>
-                <div class="text-3xl font-bold text-white mb-1">LightGBM</div>
+                <div class="text-3xl font-bold text-slate-900 dark:text-white mb-1">LightGBM</div>
                 <div class="text-xs uppercase tracking-widest text-slate-500">Winning Algorithm</div>
             </div>
             <div>
-                <div class="text-3xl font-bold text-white mb-1">RMSE</div>
+                <div class="text-3xl font-bold text-slate-900 dark:text-white mb-1">RMSE</div>
                 <div class="text-xs uppercase tracking-widest text-slate-500">Optimized Metric</div>
             </div>
         </div>
@@ -155,8 +181,8 @@
     <!-- Data Insights -->
     <section id="analysis" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-16">
-            <h2 class="text-3xl font-bold text-white mb-4">Exploratory Data Analysis</h2>
-            <p class="text-slate-400 max-w-2xl">Visualizing the hidden patterns discovered during the data investigation phase.</p>
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Exploratory Data Analysis</h2>
+            <p class="text-slate-600 dark:text-slate-400 max-w-2xl">Visualizing the hidden patterns discovered during the data investigation phase.</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -164,17 +190,17 @@
             <div class="glass-card p-6 rounded-2xl">
                 <div class="flex justify-between items-start mb-6">
                     <div>
-                        <h3 class="text-lg font-semibold text-white">Economy vs Business</h3>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Economy vs Business</h3>
                         <p class="text-xs text-slate-500 mt-1">Price Distribution Gap</p>
                     </div>
-                    <span class="px-2 py-1 bg-indigo-500/20 text-indigo-300 text-xs rounded border border-indigo-500/20">High Impact</span>
+                    <span class="px-2 py-1 bg-teal-100 dark:bg-teal-500/20 text-teal-700 dark:text-teal-300 text-xs rounded border border-teal-200 dark:border-teal-500/20">High Impact</span>
                 </div>
                 <div class="h-64 relative">
                     <canvas id="classChart"></canvas>
                 </div>
-                <div class="mt-4 p-4 rounded-xl bg-white/5 border border-white/5">
-                    <p class="text-sm text-slate-300">
-                        <i class="fa-solid fa-circle-info text-indigo-400 mr-2"></i>
+                <div class="mt-4 p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
+                    <p class="text-sm text-slate-600 dark:text-slate-300">
+                        <i class="fa-solid fa-circle-info text-teal-500 dark:text-teal-400 mr-2"></i>
                         <strong>Insight:</strong> The 'Class' feature segregates the data into two distinct clusters. Vistara & Air India Business tickets average <strong>₹52k+</strong>, while Economy averages <strong>₹6.5k</strong>.
                     </p>
                 </div>
@@ -184,17 +210,17 @@
             <div class="glass-card p-6 rounded-2xl">
                 <div class="flex justify-between items-start mb-6">
                     <div>
-                        <h3 class="text-lg font-semibold text-white">Booking Trend Analysis</h3>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Booking Trend Analysis</h3>
                         <p class="text-xs text-slate-500 mt-1">Price vs Days Left to Departure</p>
                     </div>
-                    <span class="px-2 py-1 bg-red-500/20 text-red-300 text-xs rounded border border-red-500/20">Critical Trend</span>
+                    <span class="px-2 py-1 bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300 text-xs rounded border border-rose-200 dark:border-rose-500/20">Critical Trend</span>
                 </div>
                 <div class="h-64 relative">
                     <canvas id="daysLeftChart"></canvas>
                 </div>
-                <div class="mt-4 p-4 rounded-xl bg-white/5 border border-white/5">
-                    <p class="text-sm text-slate-300">
-                        <i class="fa-solid fa-circle-info text-red-400 mr-2"></i>
+                <div class="mt-4 p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
+                    <p class="text-sm text-slate-600 dark:text-slate-300">
+                        <i class="fa-solid fa-circle-info text-rose-500 dark:text-rose-400 mr-2"></i>
                         <strong>Insight:</strong> An exponential price surge is observed when booking within 15 days of departure. This "urgency tax" is a key predictor for the regression model.
                     </p>
                 </div>
@@ -204,7 +230,7 @@
             <div class="glass-card p-6 rounded-2xl lg:col-span-2">
                  <div class="flex justify-between items-start mb-6">
                     <div>
-                        <h3 class="text-lg font-semibold text-white">Airline Market Analysis</h3>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Airline Market Analysis</h3>
                         <p class="text-xs text-slate-500 mt-1">Average Ticket Pricing across Carriers</p>
                     </div>
                 </div>
@@ -216,30 +242,30 @@
     </section>
 
     <!-- Models Section -->
-    <section id="models" class="py-24 bg-black/20">
+    <section id="models" class="py-24 bg-slate-100 dark:bg-black/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row gap-16 items-center">
                 <div class="md:w-1/3">
-                    <h2 class="text-3xl font-bold text-white mb-6">Model Architecture & <br> Feature Importance</h2>
-                    <p class="text-slate-400 mb-8 leading-relaxed">
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-6">Model Architecture & <br> Feature Importance</h2>
+                    <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
                         The <strong>LightGBM</strong> model was selected after comparing it with Random Forest and Decision Trees. It correctly identified that <em>Class</em> and <em>Duration</em> are the primary drivers of cost, while <em>Departure Time</em> plays a secondary but significant role.
                     </p>
                     
                     <div class="space-y-4">
-                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10">
-                            <span class="text-slate-300">LightGBM Accuracy</span>
-                            <span class="text-green-400 font-bold">98.45%</span>
+                        <div class="flex items-center justify-between p-4 bg-white dark:bg-white/5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
+                            <span class="text-slate-600 dark:text-slate-300">LightGBM Accuracy</span>
+                            <span class="text-emerald-600 dark:text-emerald-400 font-bold">98.45%</span>
                         </div>
-                         <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10">
-                            <span class="text-slate-300">Random Forest</span>
-                            <span class="text-indigo-400 font-bold">97.60%</span>
+                         <div class="flex items-center justify-between p-4 bg-white dark:bg-white/5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm">
+                            <span class="text-slate-600 dark:text-slate-300">Random Forest</span>
+                            <span class="text-teal-600 dark:text-teal-400 font-bold">97.60%</span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="md:w-2/3 w-full">
                     <div class="glass-card p-8 rounded-2xl">
-                        <h4 class="text-white font-semibold mb-6">Feature Importance Score</h4>
+                        <h4 class="text-slate-900 dark:text-white font-semibold mb-6">Feature Importance Score</h4>
                         <div class="h-80">
                             <canvas id="featureImpChart"></canvas>
                         </div>
@@ -250,52 +276,121 @@
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-white/10 py-12 bg-[#0f172a]">
+    <footer class="border-t border-slate-200 dark:border-white/10 py-12 bg-white dark:bg-[#0f172a]">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-slate-500 text-sm">
                 &copy; 2025 Flight Price Prediction Project. Built for Kaggle MLP Term 2.
             </p>
             <div class="flex justify-center gap-6 mt-6">
-                <a href="#" class="text-slate-500 hover:text-white transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
-                <a href="#" class="text-slate-500 hover:text-white transition-colors"><i class="fa-brands fa-kaggle text-xl"></i></a>
-                <a href="#" class="text-slate-500 hover:text-white transition-colors"><i class="fa-brands fa-linkedin text-xl"></i></a>
+                <a href="#" class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
+                <a href="#" class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"><i class="fa-brands fa-kaggle text-xl"></i></a>
+                <a href="#" class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"><i class="fa-brands fa-linkedin text-xl"></i></a>
             </div>
         </div>
     </footer>
 
-    <!-- Chart Logic -->
+    <!-- Chart Logic & Theme Toggle -->
     <script>
-        // Global Chart Defaults for Dark Theme
-        Chart.defaults.font.family = "'Outfit', sans-serif";
-        Chart.defaults.color = '#94a3b8';
-        Chart.defaults.scale.grid.color = 'rgba(255, 255, 255, 0.05)';
+        // --- 1. Dark Mode Logic ---
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        // Check local storage or system preference
+        if (localStorage.getItem('theme') === 'dark' || 
+           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            
+            // Save preference
+            if (htmlElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+            
+            // Update charts after theme switch
+            updateCharts();
+        });
+
+
+        // --- 2. Chart Logic ---
         
-        // 1. Class Analysis (Doughnut)
-        new Chart(document.getElementById('classChart'), {
+        let charts = {}; // Store chart instances to update them later
+
+        function getChartColors() {
+            const isDark = htmlElement.classList.contains('dark');
+            return {
+                text: isDark ? '#94a3b8' : '#64748b',
+                grid: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+                tooltipBg: isDark ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                tooltipText: isDark ? '#fff' : '#1e293b'
+            };
+        }
+
+        function updateCharts() {
+            const colors = getChartColors();
+            
+            Object.values(charts).forEach(chart => {
+                // Update Scales
+                if (chart.options.scales) {
+                    if (chart.options.scales.x) {
+                        chart.options.scales.x.ticks.color = colors.text;
+                        chart.options.scales.x.grid.color = colors.grid;
+                        if (chart.options.scales.x.title) chart.options.scales.x.title.color = colors.text;
+                    }
+                    if (chart.options.scales.y) {
+                        chart.options.scales.y.ticks.color = colors.text;
+                        chart.options.scales.y.grid.color = colors.grid;
+                    }
+                }
+                // Update Legend
+                if (chart.options.plugins.legend) {
+                    chart.options.plugins.legend.labels.color = colors.text;
+                }
+                chart.update();
+            });
+        }
+
+        // Initialize Defaults
+        Chart.defaults.font.family = "'Outfit', sans-serif";
+        const initialColors = getChartColors();
+
+        // 1. Class Analysis
+        charts.classChart = new Chart(document.getElementById('classChart'), {
             type: 'doughnut',
             data: {
                 labels: ['Economy', 'Business'],
                 datasets: [{
                     data: [206666, 93487],
-                    backgroundColor: ['#3b82f6', '#8b5cf6'],
+                    backgroundColor: ['#2dd4bf', '#f43f5e'], // Teal-400, Rose-500
                     borderWidth: 0,
                     hoverOffset: 10
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 cutout: '75%',
                 plugins: {
-                    legend: { position: 'right', labels: { usePointStyle: true, boxWidth: 8 } }
+                    legend: { 
+                        position: 'right', 
+                        labels: { usePointStyle: true, boxWidth: 8, color: initialColors.text } 
+                    }
                 }
             }
         });
 
-        // 2. Days Left (Line)
+        // 2. Days Left
         const ctxDays = document.getElementById('daysLeftChart');
         const days = Array.from({length: 50}, (_, i) => 50 - i);
         const prices = days.map(d => (d < 5 ? 22000 : d < 15 ? 15000 : 6000) + Math.random()*1000);
 
-        new Chart(ctxDays, {
+        charts.daysLeftChart = new Chart(ctxDays, {
             type: 'line',
             data: {
                 labels: days,
@@ -321,14 +416,22 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    x: { title: { display: true, text: 'Days Before Departure' }, reverse: true, grid: { display: false } },
-                    y: { grid: { borderDash: [4, 4] } }
+                    x: { 
+                        title: { display: true, text: 'Days Before Departure', color: initialColors.text }, 
+                        reverse: true, 
+                        grid: { display: false },
+                        ticks: { color: initialColors.text }
+                    },
+                    y: { 
+                        grid: { borderDash: [4, 4], color: initialColors.grid },
+                        ticks: { color: initialColors.text }
+                    }
                 }
             }
         });
 
-        // 3. Airline Chart (Bar)
-        new Chart(document.getElementById('airlineChart'), {
+        // 3. Airline Chart
+        charts.airlineChart = new Chart(document.getElementById('airlineChart'), {
             type: 'bar',
             data: {
                 labels: ['Vistara', 'Air India', 'SpiceJet', 'Indigo', 'Go First', 'AirAsia'],
@@ -336,7 +439,12 @@
                     label: 'Avg Price (₹)',
                     data: [30396, 23507, 6179, 5324, 5657, 4091],
                     backgroundColor: [
-                        '#8b5cf6', '#6366f1', '#f59e0b', '#3b82f6', '#10b981', '#ef4444'
+                        '#fb7185', // Rose-400
+                        '#2dd4bf', // Teal-400
+                        '#fcd34d', // Amber-300
+                        '#38bdf8', // Sky-400
+                        '#34d399', // Emerald-400
+                        '#f43f5e'  // Rose-500
                     ],
                     borderRadius: 4
                 }]
@@ -346,22 +454,29 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: { 
-                    y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
-                    x: { grid: { display: false } }
+                    y: { 
+                        beginAtZero: true, 
+                        grid: { borderDash: [4, 4], color: initialColors.grid },
+                        ticks: { color: initialColors.text }
+                    },
+                    x: { 
+                        grid: { display: false },
+                        ticks: { color: initialColors.text }
+                    }
                 }
             }
         });
 
-        // 4. Feature Importance (Horizontal Bar)
-        new Chart(document.getElementById('featureImpChart'), {
+        // 4. Feature Importance
+        charts.featureImpChart = new Chart(document.getElementById('featureImpChart'), {
             type: 'bar',
             data: {
                 labels: ['Class', 'Duration', 'Days_Left', 'Airline', 'Source', 'Stops', 'Dep_Time'],
                 datasets: [{
                     label: 'Impact Score',
                     data: [0.35, 0.20, 0.18, 0.10, 0.08, 0.05, 0.04],
-                    backgroundColor: 'rgba(99, 102, 241, 0.8)', // Indigo
-                    hoverBackgroundColor: '#818cf8',
+                    backgroundColor: 'rgba(20, 184, 166, 0.8)', // Teal-500
+                    hoverBackgroundColor: '#5eead4', // Teal-300
                     borderRadius: 4,
                     barThickness: 24
                 }]
@@ -372,11 +487,21 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: { 
-                    x: { grid: { color: 'rgba(255,255,255,0.05)' } }, 
-                    y: { grid: { display: false }, ticks: { color: '#cbd5e1' } } 
+                    x: { 
+                        grid: { color: initialColors.grid },
+                        ticks: { color: initialColors.text }
+                    }, 
+                    y: { 
+                        grid: { display: false }, 
+                        ticks: { color: initialColors.text } 
+                    } 
                 }
             }
         });
+
+        // Ensure charts have correct colors on load
+        updateCharts();
+
     </script>
 </body>
 </html>
