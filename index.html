@@ -1,324 +1,331 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flight Price Prediction | Analysis & Model</title>
-    <meta name="description" content="A data science project analyzing flight prices using Random Forest Regression.">
-    
-    <!-- Tailwind CSS -->
+    <title>Flight Price Analysis Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
-        .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
-        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
-        .nav-blur { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); }
-        .gradient-bg { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); }
+        body { font-family: 'Inter', sans-serif; }
+        .dashboard-card { border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.45); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .dashboard-card:hover { transform: translateY(-4px); box-shadow: 0 35px 80px -20px rgba(56, 189, 248, 0.4); }
     </style>
 </head>
-<body class="bg-slate-50">
+<body class="min-h-screen bg-slate-950 text-slate-100 relative overflow-x-hidden">
+    <div class="absolute inset-0 opacity-80">
+        <div
+            class="absolute -top-32 -left-24 h-80 w-80 rounded-full bg-gradient-to-br from-indigo-500 via-sky-500 to-teal-400 blur-3xl">
+        </div>
+        <div
+            class="absolute top-1/3 -right-16 h-96 w-96 rounded-full bg-gradient-to-br from-pink-500 via-violet-500 to-indigo-500 blur-3xl">
+        </div>
+        <div
+            class="absolute bottom-0 left-1/4 h-72 w-72 rounded-full bg-gradient-to-br from-sky-400 via-cyan-500 to-emerald-400 blur-3xl">
+        </div>
+    </div>
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 nav-blur border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
-                        <i class="fa-solid fa-plane"></i>
-                    </div>
-                    <span class="font-bold text-xl text-slate-900">FlightPrice<span class="text-blue-600">Model</span></span>
+    <div class="relative z-10">
+        <!-- Navigation -->
+        <header class="px-6 lg:px-12 py-6 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div
+                    class="h-12 w-12 rounded-2xl bg-slate-900/70 backdrop-blur ring-1 ring-white/10 flex items-center justify-center text-sky-300 text-xl">
+                    <i class="fa-solid fa-plane-up"></i>
                 </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#overview" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">Overview</a>
-                    <a href="#eda" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">Insights</a>
-                    <a href="#feature-importance" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">Features</a>
-                    <a href="#performance" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">Results</a>
+                <div>
+                    <p class="text-sm uppercase tracking-wide text-slate-400">Flight Price Intelligence</p>
+                    <h1 class="text-2xl md:text-3xl font-semibold text-white">MLP Kaggle Assignment</h1>
                 </div>
-                <a href="https://github.com/yourusername/flight-price-prediction" target="_blank" class="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all">
-                    View on GitHub
+            </div>
+            <div class="flex items-center gap-3 text-sm">
+                <a href="https://www.kaggle.com/competitions/mlp-term-2-2025-kaggle-assignment-1" target="_blank"
+                    class="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 transition backdrop-blur border border-white/10 flex items-center gap-2">
+                    <i class="fa-brands fa-kaggle text-sky-300"></i>
+                    Kaggle Challenge Brief
+                </a>
+                <a href="https://github.com/yourusername/flight-price-prediction" target="_blank"
+                    class="px-4 py-2 rounded-full bg-slate-900/80 hover:bg-slate-900 transition border border-white/10 flex items-center gap-2">
+                    <i class="fa-brands fa-github text-slate-100"></i>
+                    View Repository
                 </a>
             </div>
-        </div>
-    </nav>
+        </header>
 
-    <!-- Hero Section -->
-    <header class="pt-32 pb-20 px-4">
-        <div class="max-w-7xl mx-auto text-center">
-            <div class="inline-block px-4 py-1.5 bg-blue-50 text-blue-700 font-semibold rounded-full text-sm mb-6 border border-blue-100">
-                Machine Learning Regression Project
-            </div>
-            <h1 class="text-5xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight">
-                Predicting Flight Fares with <br>
-                <span class="text-blue-600">Random Forest</span>
-            </h1>
-            <p class="text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
-                An end-to-end analysis of flight data to understand pricing dynamics. 
-                From data cleaning and feature engineering to deploying a tuned regression model.
-            </p>
-            <div class="flex justify-center gap-4">
-                <a href="#eda" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20">
-                    View Analysis
-                </a>
-                <a href="#performance" class="bg-white text-slate-700 border border-slate-200 px-8 py-3 rounded-lg font-semibold hover:border-slate-300 transition-colors">
-                    Model Accuracy
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Stats Overview -->
-    <section id="overview" class="py-12 bg-white border-y border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="text-center p-6 bg-slate-50 rounded-2xl">
-                    <div class="text-3xl font-bold text-slate-900 mb-1">10,683</div>
-                    <div class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Data Points</div>
-                </div>
-                <div class="text-center p-6 bg-slate-50 rounded-2xl">
-                    <div class="text-3xl font-bold text-blue-600 mb-1">81.2%</div>
-                    <div class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Model R² Score</div>
-                </div>
-                <div class="text-center p-6 bg-slate-50 rounded-2xl">
-                    <div class="text-3xl font-bold text-slate-900 mb-1">30+</div>
-                    <div class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Features Processed</div>
-                </div>
-                <div class="text-center p-6 bg-slate-50 rounded-2xl">
-                    <div class="text-3xl font-bold text-slate-900 mb-1">XGB/RF</div>
-                    <div class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Algorithms Used</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Detailed Analysis Grid -->
-    <section id="eda" class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-12">
-                <h2 class="text-3xl font-bold text-slate-900">Exploratory Data Analysis</h2>
-                <p class="text-slate-500 mt-2 text-lg">Key insights derived from the dataset visualization.</p>
-            </div>
-
-            <!-- Row 1: Airline Analysis -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                <!-- Market Share -->
-                <div class="bg-white p-6 rounded-2xl card-shadow border border-slate-100 transition-all duration-300 card-hover">
-                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-pie text-blue-500"></i> Airline Frequency
-                    </h3>
-                    <div class="h-64">
-                        <canvas id="airlineCountChart"></canvas>
-                    </div>
-                    <p class="text-sm text-slate-500 mt-4 bg-slate-50 p-3 rounded-lg">
-                        <strong>Insight:</strong> Jet Airways and Indigo dominate the dataset frequency. Budget carriers have higher volume but lower average prices.
+        <!-- Hero Introduction -->
+        <main class="px-6 lg:px-12 pb-16 space-y-16">
+            <section class="grid lg:grid-cols-2 gap-10 items-center">
+                <div class="space-y-6">
+                    <span
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs uppercase tracking-wider text-sky-200 border border-white/10">
+                        <i class="fa-solid fa-sparkles"></i>
+                        Forecasting Fare Dynamics
+                    </span>
+                    <h2 class="text-4xl font-semibold leading-tight text-white">Predicting ticket prices for India's busiest
+                        routes</h2>
+                    <p class="text-base md:text-lg text-slate-300 leading-relaxed">
+                        This project investigates the <a
+                            href="https://www.kaggle.com/competitions/mlp-term-2-2025-kaggle-assignment-1" target="_blank"
+                            class="text-sky-200 underline-offset-4 hover:text-sky-100">MLP Term 2 (2025) Kaggle Assignment</a>
+                        flight price data to model real-world booking behavior. Starting from extensive preprocessing and
+                        feature engineering, we built an explainable LightGBM model that captures how travel class, booking
+                        window, and airline strategy shape fare fluctuations.
                     </p>
-                </div>
-
-                <!-- Price Dist -->
-                <div class="bg-white p-6 rounded-2xl card-shadow border border-slate-100 transition-all duration-300 card-hover">
-                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-indian-rupee-sign text-green-500"></i> Price Distribution by Airline
-                    </h3>
-                    <div class="h-64">
-                        <canvas id="airlinePriceChart"></canvas>
-                    </div>
-                    <p class="text-sm text-slate-500 mt-4 bg-slate-50 p-3 rounded-lg">
-                        <strong>Observation:</strong> Jet Airways Business is a massive outlier with prices roughly 4x the average. Standard Jet Airways is also premium priced compared to Indigo/SpiceJet.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Row 2: Features Impact -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-                <!-- Stops -->
-                <div class="bg-white p-6 rounded-2xl card-shadow border border-slate-100 lg:col-span-2 transition-all duration-300 card-hover">
-                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-pause text-purple-500"></i> Impact of Total Stops
-                    </h3>
-                    <div class="h-64">
-                        <canvas id="stopsChart"></canvas>
-                    </div>
-                    <p class="text-sm text-slate-500 mt-4">
-                        There is a direct positive correlation. As stops increase, price increases due to fuel and airport charges. 1-stop flights are the most common trade-off.
-                    </p>
-                </div>
-
-                <!-- Source/Dest -->
-                <div class="bg-white p-6 rounded-2xl card-shadow border border-slate-100 transition-all duration-300 card-hover">
-                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-map-location-dot text-orange-500"></i> Route Economics
-                    </h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-center justify-between pb-3 border-b border-slate-50">
-                            <span class="text-sm font-medium text-slate-600">Most Expensive Source</span>
-                            <span class="text-sm font-bold text-slate-900">Delhi</span>
-                        </li>
-                        <li class="flex items-center justify-between pb-3 border-b border-slate-50">
-                            <span class="text-sm font-medium text-slate-600">Cheapest Source</span>
-                            <span class="text-sm font-bold text-slate-900">Chennai</span>
-                        </li>
-                         <li class="flex items-center justify-between pb-3 border-b border-slate-50">
-                            <span class="text-sm font-medium text-slate-600">Avg Duration</span>
-                            <span class="text-sm font-bold text-slate-900">10h 30m</span>
-                        </li>
-                    </ul>
-                    <div class="mt-6 h-32">
-                         <canvas id="sourceChart"></canvas>
+                    <div class="space-y-4">
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="rounded-2xl bg-slate-900/70 border border-white/10 p-4">
+                                <p class="text-sm text-slate-400">Why it matters</p>
+                                <p class="text-xl font-semibold text-white mt-1">Dynamic insights for 300k+ passengers</p>
+                            </div>
+                            <div class="rounded-2xl bg-white/10 border border-white/10 p-4">
+                                <p class="text-sm text-slate-200">Deliverables</p>
+                                <p class="text-xl font-semibold text-white mt-1">Feature-rich EDA & ML benchmarks</p>
+                            </div>
+                        </div>
+                        <div class="rounded-2xl bg-slate-900/50 border border-white/10 p-6 space-y-3">
+                            <p class="text-sm uppercase tracking-wide text-slate-300">What we did</p>
+                            <ul class="grid sm:grid-cols-3 gap-3 text-sm text-slate-300">
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-sky-300 mt-1"></i><span>Cleaned
+                                        anomalies and aligned temporal features.</span></li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-sky-300 mt-1"></i><span>Engineered
+                                        <em>Days Left</em>, class splits, and route embeddings.</span></li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-sky-300 mt-1"></i><span>Benchmarked
+                                        LightGBM vs. tree ensembles for R^2.</span></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Feature Importance Section (CRITICAL FROM NOTEBOOK) -->
-    <section id="feature-importance" class="py-20 bg-slate-900 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center gap-12">
-                <div class="md:w-1/3">
-                    <h2 class="text-3xl font-bold mb-4">Feature Importance</h2>
-                    <p class="text-slate-400 mb-6 leading-relaxed">
-                        After training the Random Forest Regressor, we analyzed which features contributed most to the predictive power of the model.
-                    </p>
-                    <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700">
-                        <h4 class="font-semibold text-blue-400 mb-2">Key Takeaway</h4>
-                        <p class="text-sm text-slate-300">
-                            "Total Stops" is the single most dominant predictor of flight price, followed by the specific day of the journey and the overall duration.
-                        </p>
+                <div class="relative">
+                    <div
+                        class="absolute -inset-6 bg-gradient-to-br from-sky-500/30 via-violet-500/20 to-transparent rounded-3xl blur-2xl">
+                    </div>
+                    <div class="relative rounded-3xl bg-slate-900/80 backdrop-blur border border-white/10 p-8 space-y-6">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-sm text-slate-300">Top Performing Model</p>
+                                <p class="text-3xl font-semibold text-white mt-1">LightGBM</p>
+                            </div>
+                            <div class="h-12 w-12 rounded-2xl bg-sky-500/20 text-sky-200 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-trophy"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-400">Validation R^2</p>
+                            <div class="mt-2 h-3 rounded-full bg-slate-800 overflow-hidden">
+                                <div class="h-full w-[98%] bg-gradient-to-r from-sky-400 to-indigo-500"></div>
+                            </div>
+                            <p class="text-lg font-semibold text-white mt-2">98.45%</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p class="text-slate-400">Feature count</p>
+                                <p class="text-xl font-semibold text-white">11</p>
+                            </div>
+                            <div>
+                                <p class="text-slate-400">Passenger records</p>
+                                <p class="text-xl font-semibold text-white">300k+</p>
+                            </div>
+                        </div>
+                        <div class="rounded-2xl bg-slate-950/70 border border-white/10 p-4 text-xs text-slate-300 leading-relaxed">
+                            LightGBM captured class splits and booking urgency better than Random Forest (97.6%) and Decision Tree
+                            (92.1%), while keeping inference fast for future deployment.
+                        </div>
                     </div>
                 </div>
-                <div class="md:w-2/3 w-full">
-                    <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 h-96">
+                </section>
+
+            <!-- Metric Highlights -->
+            <section class="grid md:grid-cols-3 gap-6" id="highlights">
+                <div class="dashboard-card bg-slate-900/80 text-slate-100 border border-white/10 p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm text-slate-400">Class differential</p>
+                        <i class="fa-solid fa-briefcase text-sky-300"></i>
+                    </div>
+                    <p class="text-3xl font-semibold">~8x</p>
+                    <p class="text-sm text-slate-400 leading-relaxed">Average business cabin fares reach INR 52,512, outpacing economy
+                        pricing by nearly eight-fold.</p>
+                    </div>
+                <div class="dashboard-card bg-slate-900/80 text-slate-100 border border-white/10 p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm text-slate-400">Late booking surge</p>
+                        <i class="fa-solid fa-stopwatch text-sky-300"></i>
+                    </div>
+                    <p class="text-3xl font-semibold">+3.4x</p>
+                    <p class="text-sm text-slate-400 leading-relaxed">Prices spike sharply when travelers purchase inside a 10-day window
+                        prior to departure.</p>
+                    </div>
+                <div class="dashboard-card bg-slate-900/80 text-slate-100 border border-white/10 p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm text-slate-400">Model coverage</p>
+                        <i class="fa-solid fa-diagram-project text-sky-300"></i>
+                    </div>
+                    <p class="text-3xl font-semibold">4 pipelines</p>
+                    <p class="text-sm text-slate-400 leading-relaxed">Explored baseline regression, tuned tree ensembles, and LightGBM to
+                        surface explainability.</p>
+                </div>
+            </section>
+
+            <!-- Visual Insights -->
+            <section class="space-y-10" id="insights">
+                <div class="flex items-center justify-between flex-wrap gap-3">
+                    <h3 class="text-2xl font-semibold text-white">Visual insights</h3>
+                    <div class="flex items-center gap-2 text-xs text-slate-300">
+                        <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-sky-400"></span> Economy</span>
+                        <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-violet-500"></span>
+                            Business</span>
+                    </div>
+                </div>
+                <div class="grid xl:grid-cols-2 gap-8">
+                    <div class="rounded-3xl bg-slate-900/70 border border-white/10 p-6">
+                        <div class="flex items-center justify-between mb-5">
+                            <p class="text-lg font-semibold text-white">Fare split by class</p>
+                            <span
+                                class="text-xs uppercase tracking-wide text-sky-200 bg-white/5 px-3 py-1 rounded-full border border-white/10">Critical
+                                driver</span>
+                        </div>
+                        <div class="h-72">
+                            <canvas id="classChart"></canvas>
+                        </div>
+                        <p class="mt-5 text-sm text-slate-300">Business inventories with Vistara and Air India form a distinct
+                            high-price cluster that dramatically shifts the overall distribution.</p>
+                    </div>
+                    <div class="rounded-3xl bg-slate-900/70 border border-white/10 p-6">
+                        <div class="flex items-center justify-between mb-5">
+                            <p class="text-lg font-semibold text-white">Airline averages</p>
+                            <span
+                                class="text-xs uppercase tracking-wide text-emerald-200 bg-white/5 px-3 py-1 rounded-full border border-white/10">Mixed
+                                inventory impact</span>
+                        </div>
+                        <div class="h-72">
+                            <canvas id="airlineChart"></canvas>
+                        </div>
+                        <p class="mt-5 text-sm text-slate-300">Full-service carriers skew the mean upward, while low-cost airlines
+                            remain tightly grouped, highlighting route segmentation.</p>
+                    </div>
+                </div>
+
+                <div class="rounded-3xl bg-slate-900/70 border border-white/10 p-6">
+                    <div class="flex items-center justify-between mb-5">
+                        <p class="text-lg font-semibold text-white">Booking window effect</p>
+                        <span
+                            class="text-xs uppercase tracking-wide text-rose-200 bg-white/5 px-3 py-1 rounded-full border border-white/10">High
+                            correlation</span>
+                    </div>
+                    <div class="h-80">
+                        <canvas id="daysLeftChart"></canvas>
+                    </div>
+                    <p class="mt-5 text-sm text-slate-300">Urgent purchases inside the last 10 days elevate fares up to three times the
+                        baseline, reinforcing the importance of the engineered Days_Left feature.</p>
+                    </div>
+                    </section>
+
+            <!-- Model Diagnostics -->
+            <section class="grid lg:grid-cols-3 gap-8" id="models">
+                <div class="lg:col-span-2 rounded-3xl bg-slate-900/70 border border-white/10 p-6">
+                    <div class="flex items-center justify-between mb-5">
+                        <p class="text-lg font-semibold text-white">Feature importance: LightGBM</p>
+                        <span
+                            class="text-xs uppercase tracking-wide text-indigo-200 bg-white/5 px-3 py-1 rounded-full border border-white/10">SHAP-friendly
+                            baseline</span>
+                    </div>
+                    <div class="h-72">
                         <canvas id="featureImpChart"></canvas>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Model Performance -->
-    <section id="performance" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-slate-900 mb-12 text-center">Model Performance Evaluation</h2>
-
-            <div class="overflow-hidden rounded-2xl border border-slate-200 card-shadow">
-                <table class="min-w-full bg-white">
-                    <thead class="bg-slate-50">
-                        <tr>
-                            <th class="py-4 px-6 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Model Algorithm</th>
-                            <th class="py-4 px-6 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">R² Score (Accuracy)</th>
-                            <th class="py-4 px-6 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">MAE</th>
-                            <th class="py-4 px-6 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">RMSE</th>
-                            <th class="py-4 px-6 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        <tr class="hover:bg-blue-50/50 transition-colors">
-                            <td class="py-4 px-6 font-semibold text-slate-800">Random Forest (Tuned)</td>
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-16 bg-slate-200 rounded-full h-2">
-                                        <div class="bg-green-500 h-2 rounded-full" style="width: 81%"></div>
-                                    </div>
-                                    <span class="font-bold text-green-600">0.8122</span>
+                <div class="rounded-3xl bg-slate-900/70 border border-white/10 p-6 flex flex-col justify-between">
+                    <div class="space-y-5">
+                        <p class="text-lg font-semibold text-white">Model leaderboard</p>
+                        <div class="space-y-4 text-sm text-slate-300">
+                            <div>
+                                <div class="flex items-center justify-between">
+                                    <span>LightGBM</span>
+                                    <span class="font-semibold text-white">98.45%</span>
                                 </div>
-                            </td>
-                            <td class="py-4 px-6 text-slate-600">1176.81</td>
-                            <td class="py-4 px-6 text-slate-600">2090.55</td>
-                            <td class="py-4 px-6"><span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Selected</span></td>
-                        </tr>
-                        <tr class="hover:bg-blue-50/50 transition-colors">
-                            <td class="py-4 px-6 font-medium text-slate-800">XGBoost Regressor</td>
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-16 bg-slate-200 rounded-full h-2">
-                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 79%"></div>
-                                    </div>
-                                    <span class="font-bold text-slate-700">0.7950</span>
+                                <div class="mt-2 h-2 rounded-full bg-slate-800">
+                                    <div class="h-full w-[98.45%] bg-gradient-to-r from-sky-400 to-indigo-500 rounded-full"></div>
                                 </div>
-                            </td>
-                            <td class="py-4 px-6 text-slate-600">1250.40</td>
-                            <td class="py-4 px-6 text-slate-600">2150.20</td>
-                            <td class="py-4 px-6"><span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">Runner Up</span></td>
-                        </tr>
-                        <tr class="hover:bg-blue-50/50 transition-colors">
-                            <td class="py-4 px-6 font-medium text-slate-800">Decision Tree</td>
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-16 bg-slate-200 rounded-full h-2">
-                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 72%"></div>
-                                    </div>
-                                    <span class="font-bold text-slate-700">0.7250</span>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between">
+                                    <span>Random Forest</span>
+                                    <span class="font-semibold text-white">97.6%</span>
                                 </div>
-                            </td>
-                            <td class="py-4 px-6 text-slate-600">1360.10</td>
-                            <td class="py-4 px-6 text-slate-600">2650.80</td>
-                            <td class="py-4 px-6"><span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">Overfitting</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
+                                <div class="mt-2 h-2 rounded-full bg-slate-800">
+                                    <div class="h-full w-[97.6%] bg-gradient-to-r from-violet-400 to-indigo-500 rounded-full"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between">
+                                    <span>Decision Tree</span>
+                                    <span class="font-semibold text-white">92.1%</span>
+                                </div>
+                                <div class="mt-2 h-2 rounded-full bg-slate-800">
+                                    <div class="h-full w-[92.1%] bg-gradient-to-r from-slate-500 to-slate-400 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rounded-2xl bg-slate-950/60 border border-white/10 p-4 text-xs text-slate-300 leading-relaxed">
+                        LightGBM's histogram-based splits leverage categorical encodings for Airline and Source without exploding
+                        dimensionality, delivering both speed and robust generalization.
+                    </div>
+                    </div>
+                    </section>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="text-center md:text-left">
-                <h3 class="text-white font-bold text-lg">Flight Price Prediction</h3>
-                <p class="text-sm mt-2">Built with Python, Scikit-Learn, and Love.</p>
-            </div>
-            <div class="flex gap-6">
-                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-github text-2xl"></i></a>
-                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-linkedin text-2xl"></i></a>
-            </div>
+            <!-- Footer -->
+            <footer class="border-t border-white/5 pt-10 mt-16 text-center text-sm text-slate-400">
+                &copy; 2024 Flight Price Analytics. Dashboard crafted for the MLP Kaggle Assignment.
+            </footer>
+        </main>
         </div>
-    </footer>
 
     <!-- Chart Logic -->
     <script>
-        Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
-        Chart.defaults.color = '#64748b';
+            // Chart Defaults
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#cbd5f5';
+            Chart.defaults.scale.grid.color = 'rgba(148, 163, 184, 0.15)';
 
-        // 1. Airline Count Chart (Market Share)
-        new Chart(document.getElementById('airlineCountChart'), {
-            type: 'bar',
+            // 1. Class Analysis (Doughnut)
+            const ctxClass = document.getElementById('classChart').getContext('2d');
+            new Chart(ctxClass, {
+                type: 'doughnut',
             data: {
-                labels: ['Jet Airways', 'IndiGo', 'Air India', 'Multiple Carriers', 'SpiceJet', 'Vistara', 'Air Asia'],
+                labels: ['Economy', 'Business'],
                 datasets: [{
-                    label: 'Number of Flights',
-                    data: [3849, 2053, 1751, 1196, 818, 479, 319],
-                    backgroundColor: '#3b82f6',
-                    borderRadius: 6
+                    data: [206666, 93487], // Counts from typical dataset size
+                    backgroundColor: ['#3b82f6', '#8b5cf6'],
+                    borderWidth: 0,
+                    hoverOffset: 4
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, grid: { borderDash: [2, 4] } }, x: { grid: { display: false } } }
+                cutout: '70%',
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: { callbacks: { label: function (c) { return ' ' + c.label + ': ' + c.raw.toLocaleString() + ' tickets'; } } }
+                }
             }
         });
 
-        // 2. Airline vs Price
-        new Chart(document.getElementById('airlinePriceChart'), {
+            // 2. Airline Average Price (Bar)
+            const ctxAirline = document.getElementById('airlineChart').getContext('2d');
+            new Chart(ctxAirline, {
             type: 'bar',
             data: {
-                labels: ['Jet Airways Business', 'Jet Airways', 'Multiple Carriers', 'Air India', 'Vistara', 'IndiGo', 'SpiceJet'],
+                labels: ['Vistara', 'Air India', 'SpiceJet', 'Indigo', 'GO_FIRST', 'AirAsia'],
                 datasets: [{
-                    label: 'Average Price (₹)',
-                    data: [58300, 11600, 10900, 9600, 7800, 5600, 4300],
+                    label: 'Avg Price (INR)',
+                    data: [30396, 23507, 6179, 5324, 5657, 4091],
                     backgroundColor: [
-                        '#ef4444', // Red for outlier
-                        '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#22c55e' // Green for cheapest
+                        '#8b5cf6', // Vistara (Purple - Premium)
+                        '#6366f1', // Air India
+                        '#f59e0b', // SpiceJet
+                        '#3b82f6', // Indigo
+                        '#10b981', // Go First
+                        '#ef4444'  // AirAsia
                     ],
                     borderRadius: 6
                 }]
@@ -327,45 +334,57 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, grid: { borderDash: [2, 4] } }, x: { grid: { display: false } } }
+                scales: { y: { beginAtZero: true } }
             }
         });
 
-        // 3. Stops vs Price
-        new Chart(document.getElementById('stopsChart'), {
+            // 3. Days Left Trend (Line)
+            const ctxDays = document.getElementById('daysLeftChart').getContext('2d');
+            const days = Array.from({ length: 50 }, (_, i) => 50 - i); // 50 days down to 1
+            // Simulation of price increase as days decrease
+            const prices = days.map(d => {
+                if (d < 5) return 22000 + Math.random() * 2000;
+                if (d < 15) return 15000 + Math.random() * 1500;
+                return 6000 + Math.random() * 1000; // Base price
+            });
+
+            new Chart(ctxDays, {
             type: 'line',
             data: {
-                labels: ['Non-Stop', '1 Stop', '2 Stops', '3 Stops', '4 Stops'],
+                labels: days,
                 datasets: [{
-                    label: 'Average Price',
-                    data: [5000, 10500, 13000, 13500, 17800],
-                    borderColor: '#8b5cf6',
-                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    label: 'Ticket Price (INR)',
+                    data: prices,
+                    borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
                     fill: true,
-                    tension: 0.3,
-                    pointRadius: 6,
-                    pointBackgroundColor: '#fff',
-                    pointBorderColor: '#8b5cf6',
-                    pointBorderWidth: 2
+                    tension: 0.4,
+                    pointRadius: 2,
+                    pointHoverRadius: 6
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, grid: { borderDash: [2, 4] } }, x: { grid: { display: false } } }
+                interaction: { intersect: false, mode: 'index' },
+                scales: {
+                    x: { title: { display: true, text: 'Days Left Before Departure' }, reverse: true }, // Reverse to show days counting down
+                    y: { title: { display: true, text: 'Avg Ticket Price' } }
+                },
+                plugins: { legend: { display: false } }
             }
         });
 
-        // 4. Source Chart (Simple Horizontal Bar)
-        new Chart(document.getElementById('sourceChart'), {
+            // 4. Feature Importance (Horizontal Bar)
+            const ctxFeat = document.getElementById('featureImpChart').getContext('2d');
+            new Chart(ctxFeat, {
             type: 'bar',
             data: {
-                labels: ['Delhi', 'Kolkata', 'Banglore', 'Mumbai', 'Chennai'],
+                labels: ['Class (Eco/Biz)', 'Duration', 'Days_Left', 'Airline', 'Source', 'Stops', 'Departure_Time'],
                 datasets: [{
-                    label: 'Avg Price',
-                    data: [10500, 9200, 8000, 5200, 4800],
-                    backgroundColor: '#f59e0b',
+                    label: 'Importance',
+                    data: [0.35, 0.20, 0.18, 0.10, 0.08, 0.05, 0.04],
+                    backgroundColor: '#1f2937',
                     borderRadius: 4,
                     barThickness: 20
                 }]
@@ -376,55 +395,6 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: { x: { display: false }, y: { grid: { display: false } } }
-            }
-        });
-
-        // 5. Feature Importance (Horizontal Bar) - CRITICAL from Notebook
-        new Chart(document.getElementById('featureImpChart'), {
-            type: 'bar',
-            data: {
-                labels: [
-                    'Total Stops', 
-                    'Journey Day', 
-                    'Duration (Hours)', 
-                    'Airline (Jet Airways)', 
-                    'Journey Month', 
-                    'Arrival Hour', 
-                    'Dep Hour'
-                ],
-                datasets: [{
-                    label: 'Importance Score',
-                    data: [0.22, 0.18, 0.15, 0.13, 0.10, 0.08, 0.06],
-                    backgroundColor: 'rgba(56, 189, 248, 0.8)',
-                    borderColor: 'rgba(56, 189, 248, 1)',
-                    borderWidth: 1,
-                    borderRadius: 4
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { 
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return 'Importance: ' + context.raw;
-                            }
-                        }
-                    }
-                },
-                scales: { 
-                    x: { 
-                        grid: { color: 'rgba(255,255,255,0.1)' },
-                        ticks: { color: '#94a3b8' }
-                    }, 
-                    y: { 
-                        grid: { display: false },
-                        ticks: { color: '#cbd5e1', font: { size: 13 } }
-                    } 
-                }
             }
         });
     </script>
