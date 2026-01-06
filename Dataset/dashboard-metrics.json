@@ -1,0 +1,174 @@
+{
+    "summary": {
+        "topModel": "LightGBM",
+        "topModelScore": 0.9845,
+        "featureCount": 11,
+        "passengerRecords": 300592,
+        "classDifferential": 8.0,
+        "businessAvgFare": 52512,
+        "economyAvgFare": 6572,
+        "lateBookingMultiplier": 3.4,
+        "pipelines": 4,
+        "optimizedMetric": "RMSE",
+        "modelLeaderboard": [
+            {
+                "name": "LightGBM",
+                "score": 0.9845
+            },
+            {
+                "name": "Random Forest",
+                "score": 0.976
+            },
+            {
+                "name": "Decision Tree",
+                "score": 0.921
+            }
+        ]
+    },
+    "classDistribution": {
+        "train": {
+            "labels": [
+                "Economy",
+                "Business"
+            ],
+            "counts": [
+                206666,
+                93487
+            ]
+        },
+        "validation": {
+            "labels": [
+                "Economy",
+                "Business"
+            ],
+            "counts": [
+                51667,
+                23371
+            ]
+        }
+    },
+    "airlineAverage": {
+        "train": {
+            "labels": [
+                "Vistara",
+                "Air India",
+                "SpiceJet",
+                "Indigo",
+                "GO_FIRST",
+                "AirAsia"
+            ],
+            "values": [
+                30396,
+                23507,
+                6179,
+                5324,
+                5657,
+                4091
+            ]
+        },
+        "validation": {
+            "labels": [
+                "Vistara",
+                "Air India",
+                "SpiceJet",
+                "Indigo",
+                "GO_FIRST",
+                "AirAsia"
+            ],
+            "values": [
+                30514,
+                23342,
+                6239,
+                5408,
+                5784,
+                4216
+            ]
+        }
+    },
+    "daysLeft": {
+        "train": {
+            "labels": [
+                50,
+                45,
+                40,
+                35,
+                30,
+                25,
+                20,
+                15,
+                10,
+                7,
+                5,
+                3,
+                1
+            ],
+            "prices": [
+                6100,
+                6050,
+                6120,
+                6400,
+                6800,
+                7200,
+                7800,
+                9200,
+                13400,
+                15600,
+                18800,
+                21400,
+                23800
+            ]
+        },
+        "validation": {
+            "labels": [
+                50,
+                45,
+                40,
+                35,
+                30,
+                25,
+                20,
+                15,
+                10,
+                7,
+                5,
+                3,
+                1
+            ],
+            "prices": [
+                5900,
+                6000,
+                6080,
+                6370,
+                6750,
+                7120,
+                7740,
+                9100,
+                13100,
+                15250,
+                18300,
+                20750,
+                23200
+            ]
+        }
+    },
+    "featureImportance": {
+        "labels": [
+            "Class (Eco/Biz)",
+            "Duration",
+            "Days_Left",
+            "Airline",
+            "Source",
+            "Stops",
+            "Departure_Time"
+        ],
+        "values": [
+            0.35,
+            0.20,
+            0.18,
+            0.10,
+            0.08,
+            0.05,
+            0.04
+        ]
+    }
+}
